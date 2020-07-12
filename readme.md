@@ -4,12 +4,17 @@ Last updated: 07.11.2020
 
 ## Purpose
 
-The purpose of the repo is to provide people with git hooks.  Git hooks
-can be used for client side validation of code.  The example provided is a Git
-hook that
-catches and fixes lint errors for
-markdown.  If lint errors are still present, the hook will prevent
-a commit (called a pre-commit hook).
+The purpose of this repository is to provide examples of Git hooks.  Git hooks
+are code executed as a result of Git actions (events).  For example, when 
+a developer checks in code on their computer, a pre-commit
+event causes certain code to execute that either allows the 
+commit or denies it.  
+
+One example provided in this repository is 
+code that checks if files are formatted correctly, and if not, 
+the code prevents the commit.  The code also helps the developer
+format the code properly so the developer has less work to do.
+
 
 
 ## Prerequisites
