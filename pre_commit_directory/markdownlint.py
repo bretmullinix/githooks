@@ -102,13 +102,15 @@ class MarkdownLint:
         is_fixed = False
         rule = rule_information[0]
         file_line_number = rule_information[3]
+
         line = file_contents[file_line_number - 1]  # file line numbers start at 0 where the line number starts at 1
+
         if rule == 'MD001':  # Header Level should only be indented one level at a time.
             line = line.replace("#", "", 1)
         if rule == 'MD002':  # First Header should be a top level header.
             line = line.replace("#", "", 1)
         if rule == 'MD009':  # Trailing spaces
-            line = self.trim(line)
+            line = self.re_rtrim(line)
             is_fixed = True
         if rule == 'MD013':  # Line Length
             line, is_fixed = self.split_line(line)
@@ -136,9 +138,10 @@ class MarkdownLint:
                 index = index - 1
             if index == 0:
                 return line, is_split
-            first_line = self.trim(line[0:split_index])  # LAST INDEX IS NOT INCLUSIVE SO SPACE WON'T BE INCLUDED
+            indentation = self.get_indentation(line)
+            first_line = self.re_rtrim(line[0:split_index])  # LAST INDEX IS NOT INCLUSIVE SO SPACE WON'T BE INCLUDED
             new_line_index = split_index + 1  # DON'T INCLUDE THE SPACE IN THE SPLIT....
-            new_line = self.trim(line[new_line_index:])
+            new_line = indentation + self.trim(line[new_line_index:])
             line = first_line + "\n" + new_line  # ADD SPACES FOR INDENTATION
             is_split = True
         return line, is_split
@@ -146,13 +149,11 @@ class MarkdownLint:
     def surround_with_blank_lines(self, file_contents, line, file_line_number):
         if file_line_number - 2 >= 0:
             previous_line = file_contents[file_line_number - 2]
-            previous_line = self.trim(previous_line)
             if not previous_line.endswith("\n"):
                 line = "\n" + line
         number_of_lines = len(file_contents)
         if file_line_number + 1 <= number_of_lines - 1:
             next_line = file_contents[file_line_number + 1]
-            next_line = self.trim(next_line)
             if not next_line.startswith("\n"):
                 line = line + "\n"
         return line
@@ -173,6 +174,20 @@ class MarkdownLint:
         with open(file_name, 'r') as file:
             file_contents = file.readlines()
         return file_contents
+
+    def get_indentation(self, line):
+        line_length = len(line)
+        result = ""
+        index = 0
+        while index < line_length:
+            if line[index] == " ":
+                result += " "
+            else:
+                break
+            index = index + 1
+        if len(result) > 0:
+            print("Your indentation = " + str(len(result)))
+        return result
 
     def write_file_contents(self, file_name, file_contents):
         with open(file_name, 'w') as file:
