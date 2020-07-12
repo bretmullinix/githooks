@@ -11,15 +11,6 @@ catches and fixes lint errors for
 markdown.  If lint errors are still present, the hook will prevent
 a commit (called a pre-commit hook).
 
-:warning: Note: The current implementation of the python code is not formatted
-very well.
-The next step is to clean up the formatting,
-and create 3 files with good formatted output:
-
-1. ansible-lint-output.txt
-1. yaml-lint-output.txt
-1. markdown-lint-output.txt
-
 
 ## Prerequisites
 
