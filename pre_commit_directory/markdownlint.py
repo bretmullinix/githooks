@@ -14,6 +14,7 @@ from githooks.pre_commit_directory.common_classes.output_lint import OutputLint
 class MarkdownLint:
 
     def get_markdown_output(self, directory_to_use=None):
+        print("\n----------------------Markdown Lint Output -------------------->")
         result = None
         current_directory = pathlib.Path(__file__).parent.absolute()
 
@@ -22,12 +23,12 @@ class MarkdownLint:
         else:
             git_root_directory = directory_to_use
 
-        print("The current path = " + git_root_directory)
-
         command_to_run = ['mdl', git_root_directory]
 
         result = self.call_mdl_and_fix_errors(command_to_run)
-
+        if result.raw_output:
+            for line in result.raw_output:
+                print(line)
         return result
 
     def call_mdl_and_fix_errors(self, command_to_run: []):
@@ -58,10 +59,13 @@ class MarkdownLint:
                 markdown_rule = [rule, rule_description, file, file_line_number]
                 filtered_output.append(markdown_rule)
             else:
-                print('NO MATCH')
+                filtered_output.append(None)
+        if len(raw_output) == 0:
+            print("No Markdown Files Found....")
+
         if not has_fixes:
             filtered_output = []
-        result = OutputLint("mdl", filtered_output, stderr, has_fixes)
+        result = OutputLint("mdl", filtered_output, stderr, has_fixes, raw_output)
 
         return result
 
@@ -76,23 +80,26 @@ class MarkdownLint:
 
         current_file = ''
         file_contents = []
-        for rule_information in filtered_output:
+        for index, rule_information in enumerate(filtered_output):
+            if rule_information is None:
+                continue
             file_name = rule_information[2]
 
             if current_file != file_name:
                 if current_file != '':
                     self.write_file_contents(current_file, file_contents)
                 current_file = file_name
-                print("Current File = " + current_file)
                 file_contents = self.get_file_contents(current_file)
 
-            self.fix_rule(rule_information, file_contents)
-
+            is_fixed = self.fix_rule(rule_information, file_contents)
+            if is_fixed:
+                output.raw_output.pop()
         if current_file != '':
             self.write_file_contents(current_file, file_contents)
         return True
 
     def fix_rule(self, rule_information, file_contents):
+        is_fixed = False
         rule = rule_information[0]
         file_line_number = rule_information[3]
         line = file_contents[file_line_number - 1]  # file line numbers start at 0 where the line number starts at 1
@@ -102,6 +109,7 @@ class MarkdownLint:
             line = line.replace("#", "", 1)
         if rule == 'MD009':  # Trailing spaces
             line = self.trim(line)
+            is_fixed = True
         if rule == 'MD013':  # Line Length
             line_length = len(line)
             if line_length > 80:
@@ -110,12 +118,13 @@ class MarkdownLint:
                 line = first_line + "\n" + new_line
         if rule == 'MD022':  # Headers should be surrounded by blank lines
             line = self.surround_with_blank_lines(file_contents, line, file_line_number)
-
+            is_fixed = True
         if rule == 'MD032':  # Lists should be surrounded by blank lines
             None
             # line = surround_with_blank_lines(file_contents, line, file_line_number)
 
         file_contents[file_line_number - 1] = line  # file line numbers start at 0 where the line number starts at 1
+        return is_fixed
 
     def surround_with_blank_lines(self, file_contents, line, file_line_number):
         if file_line_number - 2 >= 0:
@@ -164,7 +173,6 @@ class MarkdownLint:
 def main():
     obj = MarkdownLint()
     results = obj.get_markdown_output()
-    print(results)
 
 
 if __name__ == '__main__':

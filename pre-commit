@@ -7,23 +7,24 @@ import pathlib
 def main():
     git_root_directory = str(pathlib.Path(__file__).parent.parent.absolute())
     has_errors = False
+
     ansible_lint_obj = AnsibleLint()
     ansible_output = ansible_lint_obj.get_ansible_output(git_root_directory)
     if len(ansible_output.results) > 0:
         has_errors = True
-    print(ansible_output)
+
     mdl_object = MarkdownLint()
     markdown_output = mdl_object.get_markdown_output(git_root_directory)
     if len(markdown_output.results) > 0:
         has_errors = True
-    print(markdown_output)
+
     yamllint_obj = YamlLint()
     yamllint_output = yamllint_obj.get_yamllint_output(git_root_directory)
     if len(yamllint_output.results) > 0:
         has_errors = True
-    print(yamllint_output)
 
     if has_errors:
+        print("\n-----------------Over all results---------------------------->")
         print("You must fix your lint errors before you can commit your files.")
         return 1
     else:
