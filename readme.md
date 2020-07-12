@@ -24,7 +24,7 @@ A working knowledge of Python.
 
 1. Run: `python3 -m venv venv_linting`
 
-1. Run: `source activate venv_linting/bin/activate`
+1. Run: `source venv_linting/bin/activate`
 
 1. Run: `pip install gem`
 
