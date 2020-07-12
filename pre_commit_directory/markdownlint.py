@@ -13,11 +13,14 @@ from githooks.pre_commit_directory.common_classes.output_lint import OutputLint
 
 class MarkdownLint:
 
-    def get_markdown_output(self):
+    def get_markdown_output(self, directory_to_use=None):
         result = None
         current_directory = pathlib.Path(__file__).parent.absolute()
 
-        git_root_directory = str(pathlib.Path(__file__).parent.parent.parent.absolute())
+        if directory_to_use is None:
+            git_root_directory = str(pathlib.Path(__file__).parent.parent.absolute())
+        else:
+            git_root_directory = directory_to_use
 
         print("The current path = " + git_root_directory)
 
@@ -153,7 +156,10 @@ class MarkdownLint:
         pattern = r'(.+):([0-9]+):\s(MD[0-9][0-9][0-9])\s(.+)'
         results = re.search(pattern, line)
         return results
-
+    def get_re_match_characters_at_start_of_line(self, char, line):
+        pattern = r'(^' + char + r'+)' + r'(.*)'
+        results = re.search(pattern, line)
+        return results
 
 def main():
     obj = MarkdownLint()
