@@ -111,11 +111,7 @@ class MarkdownLint:
             line = self.trim(line)
             is_fixed = True
         if rule == 'MD013':  # Line Length
-            line_length = len(line)
-            if line_length > 80:
-                first_line = self.trim(line[0:79])
-                new_line = self.trim(line[79:])
-                line = first_line + "\n" + new_line
+            line, is_fixed = self.split_line(line)
         if rule == 'MD022':  # Headers should be surrounded by blank lines
             line = self.surround_with_blank_lines(file_contents, line, file_line_number)
             is_fixed = True
@@ -125,6 +121,27 @@ class MarkdownLint:
 
         file_contents[file_line_number - 1] = line  # file line numbers start at 0 where the line number starts at 1
         return is_fixed
+
+    def split_line(self, line):
+        is_split = False
+        line_length = len(line)
+        if line_length > 80:
+            split_index = 79
+            index = split_index
+            while index > 0:
+                current_val = line[index]
+                if current_val == " ":
+                    split_index = index
+                    break
+                index = index - 1
+            if index == 0:
+                return line, is_split
+            first_line = self.trim(line[0:split_index])  # LAST INDEX IS NOT INCLUSIVE SO SPACE WON'T BE INCLUDED
+            new_line_index = split_index + 1  # DON'T INCLUDE THE SPACE IN THE SPLIT....
+            new_line = self.trim(line[new_line_index:])
+            line = first_line + "\n" + new_line  # ADD SPACES FOR INDENTATION
+            is_split = True
+        return line, is_split
 
     def surround_with_blank_lines(self, file_contents, line, file_line_number):
         if file_line_number - 2 >= 0:
