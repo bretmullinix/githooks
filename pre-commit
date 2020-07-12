@@ -1,20 +1,20 @@
 #!/usr/bin/python
-import pre_commit_directory.ansiblelint;
-import pre_commit_directory.markdownlint;
-import pre_commit_directory.yamllint;
+import githooks.pre_commit_directory.ansiblelint as ansiblelint
+import githooks.pre_commit_directory.markdownlint as markdownlint
+import githooks.pre_commit_directory.yamllint as yamllint
 
 
 def main():
     has_errors = False
-    ansible_output = pre_commit_directory.ansiblelint.get_ansible_output()
+    ansible_output = ansiblelint.get_ansible_output()
     if len(ansible_output.results) > 0:
         has_errors = True
     print(ansible_output)
-    markdown_output = pre_commit_directory.markdownlint.get_markdown_output()
+    markdown_output = markdownlint.get_markdown_output()
     if len(markdown_output.results) > 0:
         has_errors = True
     print(markdown_output)
-    yamllint_output = pre_commit_directory.yamllint.get_yamllint_output()
+    yamllint_output = yamllint.get_yamllint_output()
     if len(yamllint_output.results) > 0:
         has_errors = True
     print(yamllint_output)
