@@ -58,7 +58,8 @@ def call_mdl(command_to_run):
             filtered_output.append(markdown_rule)
         else:
             print('NO MATCH')
-
+    if not has_fixes:
+        filtered_output = []
     result = OutputLint("mdl", filtered_output, stderr, has_fixes)
 
     return result

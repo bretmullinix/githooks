@@ -38,3 +38,8 @@ A working knowledge of Python.
 
 1. Run `git config core.hooksPath ./githooks`
 
+1. Run `git add .`
+
+1. Run `git commit -m "added git hooks folder and contents"`.  If you have any markdown in your repository directory, the code will not let you "commit"
+until you have fixed the lint errors.
+

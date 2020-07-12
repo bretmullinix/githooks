@@ -30,7 +30,8 @@ def get_ansible_output():
     raw_output = stdout.decode("utf-8").splitlines()
     for line in raw_output:
         None
-    result = OutputLint("ansible-lint", raw_output, stderr, has_fixes)
+    # Currently we are not checking for ansible lint errors.  This is a work in progress
+    result = OutputLint("ansible-lint", [], stderr, has_fixes)
 
     return result
 
