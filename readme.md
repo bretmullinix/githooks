@@ -5,12 +5,13 @@ Last updated: 07.11.2020
 ## Purpose
 
 The purpose of the repo is to provide people with git hooks.  Git hooks
-can be used for client side validation of code.  An example provided
-here is a start of a hook that catches and fixes lint errors for
+can be used for client side validation of code.  The example provided is a Git hook that
+catches and fixes lint errors for
 markdown.  If lint errors are still present, the hook will prevent
 a commit (called a pre-commit hook).
 
-:warning: Note: The current implementation of the python code is not formatted very well.  The next step is to clean up the formatting, 
+:warning: Note: The current implementation of the python code is not formatted very well.
+The next step is to clean up the formatting, 
 and create 3 files with good formatted output:
        
 1. ansible-lint-output.txt
