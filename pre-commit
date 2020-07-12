@@ -5,10 +5,10 @@ from githooks.pre_commit_directory.yamllint import YamlLint
 import pathlib
 
 def main():
-    git_root_directory = str(pathlib.Path(__file__).parent.parent.parent.absolute())
+    git_root_directory = str(pathlib.Path(__file__).parent.parent.absolute())
     has_errors = False
     ansible_lint_obj = AnsibleLint()
-    ansible_output = ansible_lint_obj.get_ansible_output()
+    ansible_output = ansible_lint_obj.get_ansible_output(git_root_directory)
     if len(ansible_output.results) > 0:
         has_errors = True
     print(ansible_output)
@@ -18,7 +18,7 @@ def main():
         has_errors = True
     print(markdown_output)
     yamllint_obj = YamlLint()
-    yamllint_output = yamllint_obj.get_yamllint_output()
+    yamllint_output = yamllint_obj.get_yamllint_output(git_root_directory)
     if len(yamllint_output.results) > 0:
         has_errors = True
     print(yamllint_output)
