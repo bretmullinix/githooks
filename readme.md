@@ -12,9 +12,23 @@ a commit (called a pre-commit hook).
 
 ## Prerequisites
 
+Requires Python 3.
+
 A working knowledge of Python.
 
+
+
 ## Installation
+
+1. Run: `yum -y install ansible-lint yamllint`.  These install Ansible lint and Yaml lint respectively.
+
+1. Run: `python3 -m venv venv_linting`
+
+1. Run: `source activate venv_linting/bin/activate`
+
+1. Run: `pip install gem`
+
+1. Run: `gem install mdl`.  This installs Markdown lint.
 
 1. Copy the content of the repo down to your local machine.
 
