@@ -3,13 +3,28 @@ import pre_commit_directory.ansiblelint;
 import pre_commit_directory.markdownlint;
 import pre_commit_directory.yamllint;
 
+
 def main():
+    has_errors = False
     ansible_output = pre_commit_directory.ansiblelint.get_ansible_output()
+    if len(ansible_output.results) > 0:
+        has_errors = True
     print(ansible_output)
     markdown_output = pre_commit_directory.markdownlint.get_markdown_output()
+    if len(markdown_output.results) > 0:
+        has_errors = True
     print(markdown_output)
     yamllint_output = pre_commit_directory.yamllint.get_yamllint_output()
+    if len(yamllint_output.results) > 0:
+        has_errors = True
     print(yamllint_output)
 
+    if has_errors:
+        print("You must fix your lint errors before you can commit your files.")
+        return 1
+    else:
+        return 0
+
+
 if __name__ == '__main__':
-    main()
+    exit(main())
