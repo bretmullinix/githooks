@@ -15,5 +15,10 @@ class TestParseMarkdownRule(unittest.TestCase):
 
         assert match
 
+    def test_markdown_rule_exists(self):
+        obj = ParseMarkdownRule(self.MOCK_RAW_MARKDOWN_RULE)
+        assert obj.is_rule
+
+
 if __name__ == '__main__':
     unittest.main()
