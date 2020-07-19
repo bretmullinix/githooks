@@ -9,8 +9,9 @@ from re import Match
 
 
 class TestMarkdownRule(unittest.TestCase):
+    raw_markdown_re_groups = ['/test/readme.md:15: MD009: No Trailing Spaces', '/test/readme.md', '15', 'MD009',
+                              'No Trailing Spaces.']
 
-    raw_markdown_re_groups = ['/test/readme.md:15: MD009: No Trailing Spaces','/test/readme.md', '15', 'MD009', 'No Trailing Spaces.']
     def my_side_effect(self, *args):
         return self.raw_markdown_re_groups[args[0]]
 
